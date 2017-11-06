@@ -1,0 +1,26 @@
+You should add these code to your UnityAppController.mm
+
+
+
+- (void)application:(UIApplication *)application performActionForShortcutItem:(nonnull UIApplicationShortcutItem *)shortcutItem completionHandler:(nonnull void (^)(BOOL))completionHandler
+{
+    BOOL bHandleShortCutItem = [self handleShortCutItem:shortcutItem];
+    completionHandler(bHandleShortCutItem);
+    return;
+}
+
+-(BOOL)handleShortCutItem:(UIApplicationShortcutItem *) shortcutItem
+{
+    BOOL handled = NO;
+    
+    NSString *gameObject = (NSString *)[shortcutItem.userInfo objectForKey:@"UnityGameObject"];
+    NSString *methodName = (NSString *)[shortcutItem.userInfo objectForKey:@"UnityMethod"];
+    NSString *param = (NSString *)[shortcutItem.userInfo objectForKey:@"UnityParam"];
+    if(nil != gameObject && nil != methodName && nil != param)
+    {
+        UnitySendMessage([gameObject UTF8String], [methodName UTF8String], [param UTF8String]);
+        handled = YES;
+    }
+    
+    return handled;
+}
